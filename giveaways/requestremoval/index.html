@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#89CFF0">
+    <title>FGGS - Email Removal Request</title>
+    <link rel="icon" type="image/png" href="https://turntables.dev/fggsfavicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Asap:wght@400;700&family=Titan+One&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #fff;
+            font-family: 'Asap', sans-serif;
+            color: #222;
+            overflow-x: hidden;
+        }
+
+        .page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding: 38vh 20px 8px;
+        }
+
+        .header img {
+            height: 125px;
+            max-width: 90vw;
+            object-fit: contain;
+            filter: brightness(0);
+        }
+
+        .content {
+            width: min(92%, 760px);
+            flex: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            transform: none;
+        }
+
+        .removal-box {
+            width: 100%;
+            padding: 0;
+            text-align: center;
+        }
+
+        .removal-box h1 {
+            font-family: 'Titan One', sans-serif;
+            font-weight: normal;
+            font-size: 28px;
+            margin: 0;
+            color: #000;
+            text-shadow: none;
+        }
+
+        .removal-box .line {
+            border-bottom: 2px solid #000;
+            margin: 14px auto 18px;
+            width: 95%;
+        }
+
+        .removal-box p {
+            font-family: 'Asap', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            margin: 0 auto 22px;
+            max-width: 620px;
+            line-height: 1.45;
+            color: #000;
+            text-shadow: none;
+        }
+
+        .removal-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .removal-form input[type="email"] {
+            width: min(100%, 480px);
+            padding: 12px 14px;
+            border-radius: 10px;
+            border: 2px solid #2ab0d1;
+            font-family: 'Asap', sans-serif;
+            font-size: 16px;
+            outline: none;
+            background: #fff;
+            color: #000;
+            text-shadow: none;
+        }
+
+        .removal-form input[type="email"]:focus {
+            box-shadow: 0 0 0 3px rgba(42,176,209,0.2);
+        }
+
+        .button {
+            background-color: #32c9eb;
+            color: white;
+            font-family: 'Titan One', sans-serif;
+            font-weight: normal;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            cursor: pointer;
+            border: 2px solid white;
+            text-shadow: 2px 2px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 0 rgba(0,0,0,0.08);
+        }
+
+        .button:hover { filter: brightness(1.03); }
+        .button:disabled { opacity: 0.65; cursor: not-allowed; }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 99;
+        }
+
+        .signup-popup, .result-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #2ab0d1;
+            padding: 20px;
+            border-radius: 20px;
+            border: 3px solid white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            z-index: 101;
+            text-align: center;
+            color: white;
+            width: min(90vw, 560px);
+            box-sizing: border-box;
+        }
+
+        .signup-popup h2, .result-popup h2 {
+            font-family: 'Titan One', sans-serif;
+            font-weight: normal;
+            margin-top: 0;
+            text-shadow: 2px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .signup-popup .line, .result-popup .line {
+            border-bottom: 2px solid white;
+            margin: 10px auto;
+            width: 95%;
+        }
+
+        .signup-popup p, .result-popup p {
+            font-family: 'Asap', sans-serif;
+            font-weight: 700;
+            text-shadow: none;
+            line-height: 1.45;
+        }
+
+        .signup-popup .close, .result-popup .close {
+            background-color: #32c9eb;
+            color: white;
+            font-family: 'Titan One', sans-serif;
+            font-weight: normal;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 2px solid white;
+            text-shadow: 2px 2px rgba(0, 0, 0, 0.2);
+            margin: 4px;
+        }
+
+        .popup-actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        @media (max-width: 600px) {
+            .removal-box h1 { font-size: 24px; }
+            .header { padding: 32vh 20px 8px; }
+            .header img { height: 94px; }
+            .content { width: min(92%, 760px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <header class="header">
+            <img src="./FGGS_files/fggslogo.png" alt="FGGS">
+        </header>
+
+        <main class="content">
+            <section class="removal-box" aria-labelledby="remove-title">
+                <h1 id="remove-title">EMAIL REMOVAL REQUEST</h1>
+                <div class="line"></div>
+                <p>For any reason, you can request your email to be signed out of a giveaway, if one is ongoing.<br>Please enter the email you would like to remove:</p>
+
+                <form class="removal-form" id="removal-form" onsubmit="requestRemoval(event)">
+                    <input
+                        type="email"
+                        id="removal-email"
+                        name="email"
+                        placeholder="chunstonbailey@fallguys.com"
+                        autocomplete="email"
+                        required
+                    >
+                    <button class="button" type="submit">REMOVE EMAIL</button>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+
+    <div class="signup-popup" id="confirmation-popup" role="dialog" aria-modal="true" aria-labelledby="confirmation-title">
+        <h2 id="confirmation-title">CONFIRM REMOVAL</h2>
+        <div class="line"></div>
+        <p id="confirmation-text">Are you sure you want to request the removal of this email address from the giveaway list?</p>
+        <div class="popup-actions">
+            <button class="close" type="button" id="confirm-removal-button" onclick="confirmRemoval()">CONFIRM</button>
+            <button class="close" type="button" onclick="closePopup('confirmation-popup')">CANCEL</button>
+        </div>
+    </div>
+
+    <div class="result-popup" id="success-popup" role="dialog" aria-modal="true" aria-labelledby="success-title">
+        <h2 id="success-title">REQUEST RECIEVED!</h2>
+        <div class="line"></div>
+        <p id="success-text">The removal request has been recieved. You will recieve another email to confirm it has been removed.</p>
+        <button class="close" type="button" onclick="closePopup('success-popup')">CLOSE</button>
+    </div>
+
+    <div class="result-popup" id="failure-popup" role="dialog" aria-modal="true" aria-labelledby="failure-title">
+        <h2 id="failure-title">REMOVAL FAILED!</h2>
+        <div class="line"></div>
+        <p id="failure-text">The removal service could not complete the request. Please try again later.</p>
+        <button class="close" type="button" onclick="closeFailurePopup()">TRY AGAIN</button>
+    </div>
+
+    <script>
+        const REMOVE_API_ENDPOINT = 'https://formslist.com/f/8ScAradW44VL';
+
+        let pendingEmail = '';
+
+        function showPopup(id) {
+            document.getElementById(id).style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+
+        function closePopup(id) {
+            document.getElementById(id).style.display = 'none';
+
+            const openPopups = document.querySelectorAll('.signup-popup, .result-popup');
+            const anyOpen = Array.from(openPopups).some((popup) => popup.style.display === 'block');
+            if (!anyOpen) {
+                document.getElementById('overlay').style.display = 'none';
+            }
+        }
+
+        function requestRemoval(event) {
+            event.preventDefault();
+
+            const emailInput = document.getElementById('removal-email');
+            const email = emailInput.value.trim();
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!emailInput.checkValidity() || !emailPattern.test(email)) {
+                emailInput.reportValidity();
+                return;
+            }
+
+            pendingEmail = email;
+            document.getElementById('confirmation-text').textContent =
+                `Are you sure you want to remove ${email} from the giveaway list?`;
+
+            showPopup('confirmation-popup');
+        }
+
+        async function confirmRemoval() {
+            const button = document.getElementById('confirm-removal-button');
+            button.disabled = true;
+            button.textContent = 'REMOVING...';
+
+            try {
+                const formData = new FormData();
+                formData.append('email', pendingEmail);
+
+                await fetch(REMOVE_API_ENDPOINT, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: formData
+                });
+
+                closePopup('confirmation-popup');
+                document.getElementById('removal-form').reset();
+                document.getElementById('success-text').textContent =
+                    'The email address has been submitted to the removal list.';
+                showPopup('success-popup');
+                pendingEmail = '';
+            } catch (error) {
+                console.error('Removal request failed:', error);
+                closePopup('confirmation-popup');
+                document.getElementById('failure-text').textContent =
+                    'The removal service could not be reached. Please try again later.';
+                showPopup('failure-popup');
+            } finally {
+                button.disabled = false;
+                button.textContent = 'CONFIRM';
+            }
+        }
+
+        function closeFailurePopup() {
+            closePopup('failure-popup');
+            document.getElementById('removal-email').focus();
+        }
+
+        document.getElementById('overlay').addEventListener('click', () => {
+            document.querySelectorAll('.signup-popup, .result-popup').forEach((popup) => {
+                popup.style.display = 'none';
+            });
+            document.getElementById('overlay').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
